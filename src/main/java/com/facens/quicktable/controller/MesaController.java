@@ -18,6 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.facens.quicktable.dto.MesaDTO;
 import com.facens.quicktable.service.MesaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +29,10 @@ import lombok.RequiredArgsConstructor;
 public class MesaController {
 
 	private final MesaService service;
-
+	
+	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	@Operation(summary = "Listar Todas Mesas",
+    description = "Listar todas mesas. a resposta e uma lista com todas as mesas criadas.")
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<List<MesaDTO>> getAll() {
@@ -36,6 +41,9 @@ public class MesaController {
 		return ResponseEntity.ok(lista);
 	}
 
+	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	@Operation(summary = "Listar Mesa pelo ID",
+    description = "Lista uma mesa pelo seu ID. a resposta e a mesa com o ID enviado.")
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<MesaDTO> getById(@PathVariable Long id) {
@@ -44,6 +52,9 @@ public class MesaController {
 		return ResponseEntity.ok(objeto);
 	}
 
+	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	@Operation(summary = "Adicionar Mesa",
+    description = "Adicionar uma nova mesa. a resposta e a mesa adicionada no banco de dados.")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<MesaDTO> add(@RequestBody @Valid MesaDTO mesaDTO, UriComponentsBuilder uriBuilder) {
@@ -54,6 +65,9 @@ public class MesaController {
 		return ResponseEntity.created(uri).body(savedMesa);
 	}
 
+	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	@Operation(summary = "Editar Mesa pelo ID",
+    description = "Editar uma mesa. a resposta e a mesa editada.")
 	@PatchMapping("/{id}")
 	public ResponseEntity<MesaDTO> edit(@PathVariable Long id, @RequestBody MesaDTO mesaDTO) {
 		MesaDTO objeto = service.edit(id, mesaDTO);
@@ -61,6 +75,9 @@ public class MesaController {
 		return ResponseEntity.ok(objeto);
 	}
 
+	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	@Operation(summary = "Deletar Mesa pelo ID",
+    description = "Deletar uma mesa pelo ID enviado.")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> delete(@PathVariable Long id)/* throws UserNotFoundException */ {

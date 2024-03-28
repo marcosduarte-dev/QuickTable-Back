@@ -3,6 +3,7 @@ package com.facens.quicktable.dto;
 import com.facens.quicktable.enums.StatusMesa;
 import com.facens.quicktable.model.Mesa;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MesaDTO {
 	private Long id;
-	//@NotBlank(message = "Titulo é obrigatório!")
+	@NotNull
 	private String titulo;
+	@NotNull
 	private StatusMesa status;
 	
 	public static MesaDTO convert(Mesa mesa) { 
