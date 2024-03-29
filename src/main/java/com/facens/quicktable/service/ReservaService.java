@@ -95,7 +95,7 @@ public class ReservaService {
 		} else if (mesa.getStatus().equals(StatusMesa.ABERTO)) {
 			Reserva reserva = new Reserva();
 			reserva.setData_abertura(LocalDateTime.now());
-			mesa = mesaService.abrirMesa(idMesa);
+			mesa = mesaService.usarMesa(idMesa);
 			reserva.setMesa(mesa);
 			reserva.setQtde_participantes((long) 1);
 			reserva.setTotal_gasto((float) 0);

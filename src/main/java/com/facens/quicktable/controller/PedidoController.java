@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.facens.quicktable.dto.ItemQuantidadeDTO;
 import com.facens.quicktable.dto.PedidoDTO;
+import com.facens.quicktable.enums.StatusPedido;
 import com.facens.quicktable.service.ItemQuantidadeService;
 import com.facens.quicktable.service.PedidoService;
 

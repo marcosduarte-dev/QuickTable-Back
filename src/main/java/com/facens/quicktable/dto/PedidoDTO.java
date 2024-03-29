@@ -19,7 +19,6 @@ public class PedidoDTO {
 	private Long id;
 	private List<ItemQuantidadeDTO> itemQuantidade;
 	private ReservaDTO reserva;
-	private int quantidade;
 	private float totalPedido;
 	private String nome_cliente;
 	private StatusPedido status;
