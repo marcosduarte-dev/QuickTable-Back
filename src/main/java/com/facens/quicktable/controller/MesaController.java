@@ -41,7 +41,7 @@ public class MesaController {
 		return ResponseEntity.ok(lista);
 	}
 
-	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	/*@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
 	@Operation(summary = "Listar Mesa pelo ID",
     description = "Lista uma mesa pelo seu ID. a resposta e a mesa com o ID enviado.")
 	@GetMapping("/{id}")
@@ -50,7 +50,7 @@ public class MesaController {
 		MesaDTO objeto = service.findById(id);
 		
 		return ResponseEntity.ok(objeto);
-	}
+	}*/
 
 	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
 	@Operation(summary = "Adicionar Mesa",
@@ -65,7 +65,7 @@ public class MesaController {
 		return ResponseEntity.created(uri).body(savedMesa);
 	}
 
-	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
+	/*@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
 	@Operation(summary = "Editar Mesa pelo ID",
     description = "Editar uma mesa. a resposta e a mesa editada.")
 	@PatchMapping("/{id}")
@@ -73,7 +73,7 @@ public class MesaController {
 		MesaDTO objeto = service.edit(id, mesaDTO);
 		
 		return ResponseEntity.ok(objeto);
-	}
+	}*/
 
 	@Tag(name = "CRUD Mesa", description = "Metodos de CRUD para objeto Mesa")
 	@Operation(summary = "Deletar Mesa pelo ID",

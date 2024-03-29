@@ -2,6 +2,7 @@ package com.facens.quicktable.dto;
 
 import java.util.List;
 
+import com.facens.quicktable.enums.StatusPedido;
 import com.facens.quicktable.model.Pedido;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,8 @@ public class PedidoDTO {
 	private ReservaDTO reserva;
 	private int quantidade;
 	private float totalPedido;
+	private String nome_cliente;
+	private StatusPedido status;
 	
 	public static PedidoDTO convert(Pedido pedido) {
 		PedidoDTO pedidoDTO = new PedidoDTO();
@@ -28,7 +31,9 @@ public class PedidoDTO {
 		if (pedido.getReserva() != null) {
 			pedidoDTO.setReserva(ReservaDTO.convert(pedido.getReserva()));
 		}
-
+		pedidoDTO.setNome_cliente(pedido.getNome_cliente());
+		pedidoDTO.setStatus(pedido.getStatus());
+		
 		return pedidoDTO;
 	}
 	

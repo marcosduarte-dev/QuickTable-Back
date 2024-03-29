@@ -1,6 +1,7 @@
 package com.facens.quicktable.model;
 
 import com.facens.quicktable.dto.PedidoDTO;
+import com.facens.quicktable.enums.StatusPedido;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +28,9 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name = "id_reserva")
 	private Reserva reserva;
+	
+	private String nome_cliente;
+	private StatusPedido status;
 
 	public static Pedido convert(PedidoDTO pedidoDTO) {
 		Pedido pedido = new Pedido();
@@ -34,7 +38,10 @@ public class Pedido {
 		if (pedido.getReserva() != null) {
 			pedido.setReserva(Reserva.convert(pedidoDTO.getReserva()));
 		}
-
+		
+		pedido.setNome_cliente(pedidoDTO.getNome_cliente());
+		pedido.setStatus(pedidoDTO.getStatus());
+		
 		return pedido;
 	}
 }
