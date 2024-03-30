@@ -32,6 +32,14 @@ public class PedidoService {
 				.map(PedidoDTO::convert)
 				.collect(Collectors.toList());
 	}
+	
+	public List<PedidoDTO> getByNomeCliente(String nomeCliente) {
+		List<Pedido> pedidos = repository.getAllByNomeCliente(nomeCliente);
+		return pedidos
+				.stream()
+				.map(PedidoDTO::convert)
+				.collect(Collectors.toList());
+	}
 
 	public PedidoDTO findById(long id) {
 		Pedido pedido = repository.findById(id)
@@ -56,10 +64,12 @@ public class PedidoService {
 		
 		reserva.setTotal_gasto(reserva.getTotal_gasto() + pedidoDTO.getTotalPedido());
 		
+		pedidoDTO.setStatus(StatusPedido.ANDAMENTO);
 		Pedido pedido = Pedido.convert(pedidoDTO);
 		pedido.setReserva(reserva);
 		pedido.setStatus(StatusPedido.ANDAMENTO);
 		
+		System.out.println(pedido.getStatus());
 		repository.save(pedido);
 		
 		return PedidoDTO.convert(pedido);

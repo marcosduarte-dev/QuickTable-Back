@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.facens.quicktable.dto.ItemQuantidadeDTO;
 import com.facens.quicktable.dto.PedidoDTO;
-import com.facens.quicktable.enums.StatusPedido;
 import com.facens.quicktable.service.ItemQuantidadeService;
 import com.facens.quicktable.service.PedidoService;
 
@@ -49,9 +47,31 @@ public class PedidoController {
 			
 			for (ItemQuantidadeDTO itemQuantidade : listaItemQuantidade) {
 				totalPedido += itemQuantidade.getItem().getPreco() * itemQuantidade.getQuantidade();
-				System.out.println("Valor total pedido: " + totalPedido);
-				System.out.println("Valor Quantidade: " + itemQuantidade.getQuantidade());
-				System.out.println("Valor Preco: " + itemQuantidade.getItem().getPreco());
+			}
+			
+			pedido.setTotalPedido(totalPedido);
+			
+			pedido.setItemQuantidade(listaItemQuantidade);
+		}
+		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@Tag(name = "CRUD Pedido", description = "Metodos de CRUD para objeto Pedido")
+	@Operation(summary = "Listar Todos Pedidos pelo nome",
+    description = "Listar todos pedidos pelo nome. a resposta e uma lista com todos os pedidos criados.")
+	@GetMapping("/nomeCliente/{nomeCliente}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<PedidoDTO>> getByNomeCliente(String nomeCliente) {
+		List<PedidoDTO> lista = service.getByNomeCliente(nomeCliente);
+		
+		for(PedidoDTO pedido : lista) {
+			List<ItemQuantidadeDTO> listaItemQuantidade = itemQuantidadeService.findByIdPedido(pedido.getId());
+			
+			float totalPedido = (float) 0.0;
+			
+			for (ItemQuantidadeDTO itemQuantidade : listaItemQuantidade) {
+				totalPedido += itemQuantidade.getItem().getPreco() * itemQuantidade.getQuantidade();
 			}
 			
 			pedido.setTotalPedido(totalPedido);
