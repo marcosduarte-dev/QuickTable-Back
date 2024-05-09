@@ -19,6 +19,7 @@ public class MesaDTO {
 	private String titulo;
 	@NotNull
 	private StatusMesa status;
+	private Long idReservaAtiva;
 	
 	public static MesaDTO convert(Mesa mesa) { 
 		MesaDTO mesaDTO = new MesaDTO(); 

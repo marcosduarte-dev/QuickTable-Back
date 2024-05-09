@@ -40,6 +40,25 @@ public class PedidoService {
 				.map(PedidoDTO::convert)
 				.collect(Collectors.toList());
 	}
+	
+	public List<PedidoDTO> getByIdReserva(Long idReserva) {
+		List<Pedido> pedidos = repository.getAllByIdReserva(idReserva);
+		return pedidos
+				.stream()
+				.map(PedidoDTO::convert)
+				.collect(Collectors.toList());
+	}
+	
+	public List<PedidoDTO> getPedidosAndamento(String status) {
+		
+		StatusPedido statusPe = StatusPedido.ANDAMENTO;
+		
+		List<Pedido> pedidos = repository.getAllPedidosStatus(statusPe);
+		return pedidos
+				.stream()
+				.map(PedidoDTO::convert)
+				.collect(Collectors.toList());
+	}
 
 	public PedidoDTO findById(long id) {
 		Pedido pedido = repository.findById(id)
@@ -86,6 +105,16 @@ public class PedidoService {
 	public PedidoDTO edit(Long id, PedidoDTO pedidoDTO) {
 		Pedido pedido = repository.findById(id)
 				.orElseThrow(() -> new RuntimeException());
+		
+		pedido = repository.save(pedido);
+		return PedidoDTO.convert(pedido);
+	}
+	
+	public PedidoDTO fecharPedido(Long id) {
+		Pedido pedido = repository.findById(id)
+				.orElseThrow(() -> new RuntimeException());
+		
+		pedido.setStatus(StatusPedido.FINALIZADO);
 		
 		pedido = repository.save(pedido);
 		return PedidoDTO.convert(pedido);

@@ -58,12 +58,66 @@ public class PedidoController {
 	}
 	
 	@Tag(name = "CRUD Pedido", description = "Metodos de CRUD para objeto Pedido")
+	@Operation(summary = "Listar Todos Pedidos com status ANDAMENTO",
+    description = "Listar todos pedidos com status ANDAMENTO. a resposta e uma lista com todos os pedidos criados.")
+	@GetMapping("/status/{status}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<PedidoDTO>> getAllPedidosAndamento(@PathVariable String status) {
+		if (status.isBlank()) {
+			status = "ANDAMENTO";
+		}
+		
+		List<PedidoDTO> lista = service.getPedidosAndamento(status.toUpperCase());
+		
+		for(PedidoDTO pedido : lista) {
+			List<ItemQuantidadeDTO> listaItemQuantidade = itemQuantidadeService.findByIdPedido(pedido.getId());
+			
+			float totalPedido = (float) 0.0;
+			
+			for (ItemQuantidadeDTO itemQuantidade : listaItemQuantidade) {
+				totalPedido += itemQuantidade.getItem().getPreco() * itemQuantidade.getQuantidade();
+			}
+			
+			pedido.setTotalPedido(totalPedido);
+			
+			pedido.setItemQuantidade(listaItemQuantidade);
+		}
+		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@Tag(name = "CRUD Pedido", description = "Metodos de CRUD para objeto Pedido")
 	@Operation(summary = "Listar Todos Pedidos pelo nome",
     description = "Listar todos pedidos pelo nome. a resposta e uma lista com todos os pedidos criados.")
 	@GetMapping("/nomeCliente/{nomeCliente}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<List<PedidoDTO>> getByNomeCliente(String nomeCliente) {
 		List<PedidoDTO> lista = service.getByNomeCliente(nomeCliente);
+		
+		for(PedidoDTO pedido : lista) {
+			List<ItemQuantidadeDTO> listaItemQuantidade = itemQuantidadeService.findByIdPedido(pedido.getId());
+			
+			float totalPedido = (float) 0.0;
+			
+			for (ItemQuantidadeDTO itemQuantidade : listaItemQuantidade) {
+				totalPedido += itemQuantidade.getItem().getPreco() * itemQuantidade.getQuantidade();
+			}
+			
+			pedido.setTotalPedido(totalPedido);
+			
+			pedido.setItemQuantidade(listaItemQuantidade);
+		}
+		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@Tag(name = "CRUD Pedido", description = "Metodos de CRUD para objeto Pedido")
+	@Operation(summary = "Listar Todos Pedidos de uma reserva",
+    description = "Listar todos pedidos de uma reserva. a resposta e uma lista com todos os pedidos criados.")
+	@GetMapping("/reserva/{idReserva}")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<PedidoDTO>> getByNomeCliente(@PathVariable Long idReserva) {
+		List<PedidoDTO> lista = service.getByIdReserva(idReserva);
 		
 		for(PedidoDTO pedido : lista) {
 			List<ItemQuantidadeDTO> listaItemQuantidade = itemQuantidadeService.findByIdPedido(pedido.getId());
@@ -105,6 +159,16 @@ public class PedidoController {
 		pedidoDTO.setId(savedPedido.getId());
 		var uri = uriBuilder.path("/pedidos/{id}").buildAndExpand(savedPedido.getId()).toUri();
 		return ResponseEntity.created(uri).body(pedidoDTO);
+	}
+	
+	@Tag(name = "CRUD Pedido", description = "Metodos de CRUD para objeto Pedido")
+	@Operation(summary = "Fechar Pedido",
+    description = "Realizar fechamento de um pedido. a resposta e o pedido fechado no banco de dados.")
+	@PostMapping("/fecharPedido/{id}")
+	public ResponseEntity<PedidoDTO> fecharPedido(@PathVariable Long id) {
+		PedidoDTO objeto = service.fecharPedido(id);
+		
+		return ResponseEntity.ok(objeto);
 	}
 
 	/*@PatchMapping("/{id}")

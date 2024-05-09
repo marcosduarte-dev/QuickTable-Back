@@ -16,8 +16,8 @@ public class OpenAPIConfiguration {
    @Bean
    public OpenAPI defineOpenApi() {
        Server server = new Server();
-       server.setUrl("http://localhost:8080");
-       server.setDescription("Development");
+       server.setUrl("https://quicktable-back.onrender.com");
+       server.setDescription("Producao");
 
        Contact contatoMarcos = new Contact();
        contatoMarcos.setName("Marcos Duarte");

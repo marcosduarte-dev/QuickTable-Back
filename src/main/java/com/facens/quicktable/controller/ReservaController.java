@@ -82,4 +82,14 @@ public class ReservaController {
 
 		return ResponseEntity.ok(savedReserva);
 	}
+	
+	@Tag(name = "CRUD Reserva", description = "Metodos de CRUD para objeto Reserva")
+	@Operation(summary = "Fechar Reserva",
+    description = "Finalizar uma reserva apos pagamento. a resposta e codigo de sucesso ou erro!")
+	@PostMapping("/fecharReserva/{idReserva}")
+	public ResponseEntity<ReservaDTO> fecharReserva(@PathVariable Long idReserva) {
+		ReservaDTO savedReserva = service.fecharReserva(idReserva);
+
+		return ResponseEntity.ok(savedReserva);
+	}
 }

@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.facens.quicktable.dto.ReservaDTO;
 import com.facens.quicktable.enums.StatusMesa;
+import com.facens.quicktable.enums.StatusPedido;
 import com.facens.quicktable.model.Mesa;
+import com.facens.quicktable.model.Pedido;
 import com.facens.quicktable.model.Reserva;
 import com.facens.quicktable.repository.MesaRepository;
+import com.facens.quicktable.repository.PedidoRepository;
 import com.facens.quicktable.repository.ReservaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class ReservaService {
 
 	private final ReservaRepository repository;
+	private final PedidoRepository pedidoRepository;
 	private final MesaRepository mesaRepository;
 	private final MesaService mesaService;
 
@@ -104,5 +108,37 @@ public class ReservaService {
 		} else {
 			throw new RuntimeException("Houve um erro interno");
 		}
+	}
+	
+	public ReservaDTO pegarReservaAtivaPelaMesa(Long idMesa) {
+		List<Reserva> listaReserva = repository.findAllByIdMesa(idMesa);
+		Reserva reserva = listaReserva.get(0);
+		
+		return ReservaDTO.convert(reserva);
+	}
+	
+	public ReservaDTO fecharReserva(Long idReserva) {
+		Reserva reserva = repository.findById(idReserva)
+				.orElseThrow(() -> new RuntimeException());
+		
+		List<Pedido> listaPedidos = pedidoRepository.getAllByIdReserva(idReserva);
+		
+		for (Pedido pedido : listaPedidos) {
+			if(pedido.getStatus() == StatusPedido.ANDAMENTO) {
+				pedido.setStatus(StatusPedido.FINALIZADO);
+				pedidoRepository.save(pedido);
+			}
+		}
+		
+		Mesa mesa = mesaRepository.findById(reserva.getMesa().getId())
+				.orElseThrow(() -> new RuntimeException());
+		
+		mesa.setStatus(StatusMesa.ABERTO);
+		mesaRepository.save(mesa);
+		reserva.setMesa(mesa);
+		reserva.setData_fechamento(LocalDateTime.now());
+		reserva.setId(idReserva);
+		reserva = repository.save(reserva);
+		return ReservaDTO.convert(reserva);
 	}
 }

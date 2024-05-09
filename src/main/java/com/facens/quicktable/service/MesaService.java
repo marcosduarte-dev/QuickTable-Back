@@ -6,9 +6,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.facens.quicktable.dto.MesaDTO;
+import com.facens.quicktable.dto.ReservaDTO;
 import com.facens.quicktable.enums.StatusMesa;
 import com.facens.quicktable.model.Mesa;
+import com.facens.quicktable.model.Reserva;
 import com.facens.quicktable.repository.MesaRepository;
+import com.facens.quicktable.repository.ReservaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,13 +20,25 @@ import lombok.RequiredArgsConstructor;
 public class MesaService {
 	
 	private final MesaRepository repository;
+	private final ReservaRepository reservaRepository;
 	
 	public List<MesaDTO> getAll() {
 		List<Mesa> mesas = repository.findAll();
-		return mesas
+		List<MesaDTO> mesasDTO = mesas
 				.stream()
 				.map(MesaDTO::convert)
 				.collect(Collectors.toList());
+		
+		for (MesaDTO mesaDTO : mesasDTO) {
+			List<Reserva> listaReserva = reservaRepository.findAllByIdMesa(mesaDTO.getId());
+			
+			if(!listaReserva.isEmpty()) {
+				mesaDTO.setIdReservaAtiva(listaReserva.get(0).getId());
+			}
+		}
+		
+		return mesasDTO;
+		
 	}
 	
 	public MesaDTO findById(long userID) {
