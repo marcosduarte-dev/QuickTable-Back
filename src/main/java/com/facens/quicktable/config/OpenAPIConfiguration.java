@@ -16,7 +16,7 @@ public class OpenAPIConfiguration {
    @Bean
    public OpenAPI defineOpenApi() {
        Server server = new Server();
-       server.setUrl("https://quicktable-back.onrender.com");
+       server.setUrl("https://quicktable.calmwater-4256231c.eastus.azurecontainerapps.io");
        server.setDescription("Producao");
 
        Contact contatoMarcos = new Contact();
